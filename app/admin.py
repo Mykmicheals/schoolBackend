@@ -28,6 +28,7 @@ admin.site.register(Student, JSS1StudentAdmin)
 
 from django.utils.translation import gettext_lazy as _
 from django.contrib.admin.sites import AdminSite
+from django.contrib.admin.sites import AdminSite
 
 class TeacherAdminSite(AdminSite):
     site_header = _('Teacher Administration')
@@ -37,6 +38,15 @@ class TeacherAdminSite(AdminSite):
     def has_permission(self, request):
         return request.user.is_active and request.user.is_teacher
 
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_teacher:
+            # Allow teachers to edit scores for subjects they teach
+            return obj is not None and obj.subject.teacher == request.user.teacher and 'score' in request.GET
+        else:
+            return super().has_change_permission(request, obj=obj)
+
+    def has_permission(self, request):
+        return request.user.is_active and request.user.is_teacher
 
 teacher_admin_site = TeacherAdminSite(name='teacher_admin')
 teacher_admin_site.register(Teacher)
