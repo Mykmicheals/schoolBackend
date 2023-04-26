@@ -1,11 +1,31 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.utils.translation import gettext_lazy as _
+
 from .models import CustomUser
+
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = ('email', 'is_staff', 'is_teacher', 'is_student','is_principal')
+    list_display = ('first_name','email', 'is_teacher', 'is_student', 'is_principal')
+    list_filter = ('is_teacher', 'is_student', 'is_principal')
     ordering = ('email',)
-    list_filter = ('is_teacher', 'is_student')
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_teacher', 'is_student', 'is_principal', 'groups', 'user_permissions')}),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2', 'is_teacher', 'is_student', 'is_principal', 'is_active')}
+        ),
+    )
+
+
+
+
 
 admin.site.register(CustomUser, CustomUserAdmin)
+
+
