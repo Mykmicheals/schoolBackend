@@ -2,7 +2,6 @@ from django.db import models
 from userauth.models import CustomUser
 
 
-
 class ClassRoom(models.Model):
     name = models.CharField(max_length=256)
 
@@ -10,7 +9,7 @@ class ClassRoom(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "Student Class"
+        verbose_name_plural = "Classes"
         
 class Teacher(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
