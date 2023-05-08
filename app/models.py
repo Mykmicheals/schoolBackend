@@ -27,12 +27,21 @@ class Student(models.Model):
         
 class Subjects(models.Model):
     name = models.CharField(max_length=256)
-    class_offered = models.ForeignKey(ClassRoom,on_delete=models.PROTECT)
-    teacher = models.ForeignKey(Teacher,on_delete=models.PROTECT)
+    class_offered = models.ForeignKey(ClassRoom, on_delete=models.PROTECT)
+    teacher = models.ForeignKey(Teacher, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
 
-    class Meta:     
-        verbose_name_plural = "Subjects"
+
+
+
+class StudentSubject(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subjects, on_delete=models.CASCADE)
+    score = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.student} {self.subject} "
+
 
