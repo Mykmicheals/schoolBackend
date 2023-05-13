@@ -1,10 +1,11 @@
 
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serializers import UserSerializer, StudentSerializer, TeacherSerializer, SubjectSerializer
-from .models import Student, Teacher, Subjects
+from .serializers import UserSerializer, StudentSerializer, TeacherSerializer, SubjectSerializer, SubjectStudentSerializer
+from .models import Student, Teacher, Subjects, StudentSubject
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
@@ -47,6 +48,7 @@ class SubjectListCreateAPIView(ListCreateAPIView):
 
 class TeacherSubjectsListAPIView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         try:
             teacher = request.user.teacher
@@ -86,3 +88,24 @@ class SubjectStudentsListAPIView(APIView):
                 {"message": f"An error occurred: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+
+class StudentScoreViews(APIView):
+    def get(self, request, subject_id):
+        subject = get_object_or_404(Subjects, pk=subject_id)
+        student_subjects = StudentSubject.objects.filter(subject=subject)
+        serializer = SubjectStudentSerializer(student_subjects, many=True)
+        return Response(serializer.data)
+
+    def patch(self, request, subject_id):
+        subject = get_object_or_404(Subjects, pk=subject_id)
+        student_id = request.data.get('student_id')
+        student_subject = get_object_or_404(
+            StudentSubject, subject=subject, student_id=student_id)
+
+        serializer = SubjectStudentSerializer(
+            student_subject, data=request.data, partial=True)  # Set partial=True for partial updates
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
