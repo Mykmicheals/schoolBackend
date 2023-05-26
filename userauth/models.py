@@ -5,15 +5,16 @@ from django.contrib.auth.models import BaseUserManager
 
 
 GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-    )
+    ('M', 'Male'),
+    ('F', 'Female'),
+)
 
 CLASSROOM_CHOICES = (
-        ('1', 'JSS1'),
-        ('2', 'JSS2'),
-        ('3', 'JSS3'),
-    )
+    ('1', 'JSS1'),
+    ('2', 'JSS2'),
+    ('3', 'JSS3'),
+)
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -38,25 +39,22 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-
-
-class CustomUser(AbstractBaseUser, PermissionsMixin):        
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=20,blank=True)
-    middle_name = models.CharField(max_length=20,blank=True)
-    last_name = models.CharField(max_length=20,blank=True)
+    first_name = models.CharField(max_length=20, blank=True)
+    middle_name = models.CharField(max_length=20, blank=True)
+    last_name = models.CharField(max_length=20, blank=True)
     is_teacher = models.BooleanField(default=False, blank=True)
     is_student = models.BooleanField(default=False, blank=True)
-    is_principal = models.BooleanField(default=False,blank=True)
+    is_principal = models.BooleanField(default=False, blank=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    
-    classroom =  models.CharField(max_length=1, choices=CLASSROOM_CHOICES, blank=True)
-    
+
+    classroom = models.ForeignKey(
+        'app.ClassRoom', on_delete=models.CASCADE,null=True)
+
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
 
-
-    
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -64,9 +62,3 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-
-
-
-
-    
-    

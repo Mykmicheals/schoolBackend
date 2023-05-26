@@ -47,7 +47,7 @@ class SubjectListCreateAPIView(ListCreateAPIView):
 
 
 class TeacherSubjectsListAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request):
         try:
@@ -101,7 +101,7 @@ class StudentScoreViews(APIView):
         subject = get_object_or_404(Subjects, pk=subject_id)
         student_id = request.data.get('student_id')
         student_subject = get_object_or_404(
-            StudentSubject, subject=subject, student_id=student_id)
+            StudentSubject, subject=subject, student__user=student_id)
 
         serializer = SubjectStudentSerializer(
             student_subject, data=request.data, partial=True)  # Set partial=True for partial updates
