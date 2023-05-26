@@ -10,7 +10,8 @@ class ClassRoom(models.Model):
 
     class Meta:
         verbose_name_plural = "Classes"
-        
+
+
 class Teacher(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
@@ -22,9 +23,9 @@ class Student(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name}" 
-    
-        
+        return f"{self.user.first_name} {self.user.last_name}"
+
+
 class Subjects(models.Model):
     name = models.CharField(max_length=256)
     class_offered = models.ForeignKey(ClassRoom, on_delete=models.PROTECT)
@@ -34,14 +35,14 @@ class Subjects(models.Model):
         return self.name
 
 
-
-
 class StudentSubject(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subjects, on_delete=models.CASCADE)
-    score = models.IntegerField(null=True, blank=True)
+    test_score = models.IntegerField(default=0)
+    exam_score = models.IntegerField(default=0)
+
+    def total_score(self):
+        return self.test_score + self.exam_score
 
     def __str__(self):
-        return f"{self.student} {self.subject} "
-
-
+        return f"{self.student} {self.subject}"
