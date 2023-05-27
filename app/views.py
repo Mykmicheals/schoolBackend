@@ -97,15 +97,26 @@ class StudentScoreViews(APIView):
         serializer = SubjectStudentSerializer(student_subjects, many=True)
         return Response(serializer.data)
 
+
     def patch(self, request, subject_id):
         subject = get_object_or_404(Subjects, pk=subject_id)
-        student_id = request.data.get('student_id')
+        student_id = int(request.data.get('student_id'))
+        test_score = int(request.data.get('test_score'))  # Get the updated test score
+
+        student = get_object_or_404(Student, user__id=student_id)
         student_subject = get_object_or_404(
-            StudentSubject, subject=subject, student__user=student_id)
+            StudentSubject, subject=subject, student=student)  
+
+
+        student_subject.test_score = test_score
+        student_subject.save()
 
         serializer = SubjectStudentSerializer(
-            student_subject, data=request.data, partial=True)  # Set partial=True for partial updates
+            student_subject, data=request.data, partial=True)  
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
