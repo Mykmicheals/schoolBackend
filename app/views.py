@@ -120,3 +120,11 @@ class StudentScoreViews(APIView):
 
 
 
+class StudentScoresAPIView(ListAPIView):
+    serializer_class = SubjectStudentSerializer
+
+
+    def get_queryset(self):
+        user = self.request.user
+        student = Student.objects.get(user=user)  # Assuming Student model has a 'user' field
+        return StudentSubject.objects.filter(student=student)

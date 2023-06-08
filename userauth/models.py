@@ -43,12 +43,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=20, blank=True)
     middle_name = models.CharField(max_length=20, blank=True)
+    profile_image = models.ImageField(upload_to='profile_pictures', blank=True)
+
     last_name = models.CharField(max_length=20, blank=True)
     is_teacher = models.BooleanField(default=False, blank=True)
     is_student = models.BooleanField(default=False, blank=True)
     is_principal = models.BooleanField(default=False, blank=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    
+
 
     classroom = models.ForeignKey(
         'app.ClassRoom', on_delete=models.CASCADE,null=True)

@@ -7,12 +7,12 @@ from .models import CustomUser
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = ('id','first_name','email', 'is_teacher', 'is_student', 'is_principal','classroom')
+    list_display = ('id','first_name','email', 'is_teacher', 'is_student', 'is_principal','classroom',)
     list_filter = ('is_teacher', 'is_student', 'is_principal',)
     ordering = ('email',)
     fieldsets = (
         (None, {'fields': ('email', 'password','classroom')}),
-        (_('Permissions'), {'fields': ('is_teacher', 'is_student', 'is_principal', 'groups', 'user_permissions')}),
+        (_('Permissions'), {'fields': ('is_teacher', 'is_student', 'is_principal', 'groups', 'user_permissions','profile_image')}),
 #        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (

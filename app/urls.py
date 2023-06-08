@@ -10,4 +10,6 @@ urlpatterns = [
     path('mysubjects/', TeacherSubjectsListAPIView.as_view()),
     path('mysubjects/<int:subject_id>/', SubjectStudentsListAPIView.as_view()),
     path('mysubjectscore/<int:subject_id>/', StudentScoreViews.as_view()),
+    path('results/', StudentScoresAPIView.as_view()),
+
 ]

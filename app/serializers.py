@@ -55,6 +55,8 @@ class SubjectStudentSerializer(serializers.ModelSerializer):
     _id = serializers.IntegerField(
         source='student.user.id')
     last_name = serializers.CharField(source='student.user.last_name')
+    subject = serializers.CharField(source='subject.name', read_only=True)
+
     test_score = serializers.IntegerField()
     exam_score = serializers.IntegerField()
     total_score = serializers.IntegerField()

@@ -8,7 +8,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('email', 'password', 'is_teacher', 'is_student', 'is_principal',
-                  'first_name', 'middle_name', 'last_name', 'classroom', 'gender')
+                  'first_name', 'middle_name', 'last_name', 'classroom', 'gender','profile_image')
 
     def create(self, validated_data):
         user = CustomUser.objects.create(
@@ -22,6 +22,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             is_student=validated_data['is_student'],
             is_teacher=validated_data['is_teacher'],
             is_principal=validated_data['is_principal'],
+            profile_image = validated_data.get('profile_image')
         )
 
         print(user)
