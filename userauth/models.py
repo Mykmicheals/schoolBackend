@@ -13,6 +13,9 @@ CLASSROOM_CHOICES = (
     ('1', 'JSS1'),
     ('2', 'JSS2'),
     ('3', 'JSS3'),
+    ('4', 'SSS1'),
+    ('5', 'SSS2'),
+    ('6', 'SSS3'),
 )
 
 
@@ -51,9 +54,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_principal = models.BooleanField(default=False, blank=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    
-
-
     classroom = models.ForeignKey(
         'app.ClassRoom', on_delete=models.CASCADE,null=True)
 
